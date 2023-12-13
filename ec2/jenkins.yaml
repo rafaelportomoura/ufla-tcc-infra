@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template for Jenkins Virtual Machine
+
+
+Parameters:
+  Tenant:
+    Type: String
+  VolumeSize:
+    Type: Number
+    MinValue: 1
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+  AmiId:
+    Type: AWS::EC2::Image::Id
+  InstanceType:
+    Type: String
+    Default: t2.micro
+  SgInitIp:
+    Type: String
+    Description: The public ip of person who will access the jenkins
+
+
+
+Resources:
+  JenkinsRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: JenkinsRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: ec2.amazonaws.com
+          Action: sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: PermissionToAssumeRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Sid: PermissionToAssume
+              Effect: Allow
+              Action: sts:AssumeRole
+              Resource: arn:aws:iam::*:*
+        - PolicyName: PermissionToSendCommand
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action: ssm:SendCommand
+              Resource: 
+              - arn:aws:ec2:us-east-2:968945134907:instance/*
+              - arn:aws:ssm:*:*:document/*
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/IAMFullAccess
+        - arn:aws:iam::aws:policy/AWSCodeCommitReadOnly
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+
+  JenkinsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub ${Tenant}-jenkins-sg
+      GroupDescription: Enable HTTP access via port 80
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+      - CidrIp: !Sub ${SgInitIp}/32
+        FromPort: 80
+        IpProtocol: tcp
+        ToPort: 80
+
+  JenkinsInstanceProfile: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      InstanceProfileName: !Sub ${Tenant}-instance-profile
+      Path: "/"
+      Roles: 
+        - !Ref JenkinsRole
+  
+  JenkinsInstance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: !Ref AmiId
+      InstanceType: !Ref InstanceType
+      BlockDeviceMappings: 
+      - DeviceName: "/dev/sdm"
+        Ebs: 
+          VolumeType: "io1"
+          Iops: 200
+          DeleteOnTermination: true
+          VolumeSize: !Ref VolumeSize
+      - DeviceName: "/dev/sdk"
+        NoDevice: {}
+      NetworkInterfaces: 
+      - AssociatePublicIpAddress: true
+        DeviceIndex: "0"
+        GroupSet: 
+          - !Ref JenkinsSecurityGroup
+        SubnetId: !Ref SubnetId
+      IamInstanceProfile: !Ref JenkinsInstanceProfile
