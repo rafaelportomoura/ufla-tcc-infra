@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ApiGateway VPC Link Template
+
+Parameters:
+  Stage: 
+    Type: String
+  Tenant: 
+    Type: String
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Private subnets ids
+  SecurityGroups:
+    Type: List<AWS::EC2::SecurityGroup::Id>
+    Description: Private subnets security group
+
+Resources:
+  VpcLink:
+    Type: AWS::ApiGatewayV2::VpcLink
+    Properties:
+      Name: !Sub ${Stage}-${Tenant}-gateway-vpc-link
+      SecurityGroupIds: !Ref SecurityGroups
+      SubnetIds: !Ref Subnets
+
+Outputs:
+  VpcLinkId:
+    Description: Vpc Link Id
+    Value: !Ref VpcLink
+    Export:
+      Name: !Sub ${Stage}-${Tenant}-vpc-link-id
