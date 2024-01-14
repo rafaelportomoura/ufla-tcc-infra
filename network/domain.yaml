@@ -25,13 +25,17 @@ Resources:
                 Value: !Ref AWS::StackId
               - Key: Region
                 Value: !Ref AWS::Region
+              - Key: Stage
+                Value: !Ref Stage
+              - Key: Tenant
+                Value: !Ref Tenant
               - Key: Name
                 Value: !Ref DomainName
 
     WWWAlias:
         Type: AWS::Route53::RecordSet
         Properties:
-            HostedZoneId: !Ref HostedZone
+            HostedZoneId: !GetAtt HostedZone.Id
             Name: www
             AliasTarget:
                 DNSName: !Ref DomainName

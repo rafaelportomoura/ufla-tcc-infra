@@ -26,6 +26,8 @@ Resources:
                 StackName: !Ref AWS::StackName
                 StackId: !Ref AWS::StackId
                 Region: !Ref AWS::Region
+                Stage: !Ref Stage
+                Tenant: !Ref Tenant
                 Name: !Sub ${Stage}-${Tenant}-private-sg
 
 Outputs:

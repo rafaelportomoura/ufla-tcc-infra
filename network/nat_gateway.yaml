@@ -44,6 +44,10 @@ Resources:
                 Value: !Ref AWS::StackId
               - Key: Region
                 Value: !Ref AWS::Region
+              - Key: Stage
+                Value: !Ref Stage
+              - Key: Tenant
+                Value: !Ref Tenant
               - Key: Name
                 Value: !Sub ${Stage}-${Tenant}-${NatName}-elastic-ip-address
 
@@ -66,6 +70,10 @@ Resources:
                 Value: !Ref AWS::StackId
               - Key: Region
                 Value: !Ref AWS::Region
+              - Key: Stage
+                Value: !Ref Stage
+              - Key: Tenant
+                Value: !Ref Tenant
               - Key: Name
                 Value: !Sub ${Stage}-${Tenant}-${NatName}-nat-gateway
 
