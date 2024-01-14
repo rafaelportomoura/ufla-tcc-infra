@@ -24,6 +24,7 @@ def vpc(stage: str, tenant: str) -> dict[str, Any]:
 def domain_stack_name(stage: str, tenant: str) -> str:
     return stack_name(stage,tenant,'Domain-Name')
 def domain(stage: str, tenant: str, domain = 'rafamoura.com.br') -> dict[str, Any]:
+    domain = f"{stage}.{domain}" if stage != 'prod' else domain
     return {
         'template': os.path.join('network','domain.yaml'),
         'stack_name': domain_stack_name(stage,tenant),
@@ -31,6 +32,20 @@ def domain(stage: str, tenant: str, domain = 'rafamoura.com.br') -> dict[str, An
             'Stage': stage,
             'Tenant': tenant,
             'DomainName': domain
+        }
+    }
+
+def certificate_stack_name(stage: str, tenant: str) -> str:
+    return stack_name(stage,tenant,'Certificate')
+def certificate(stage: str, tenant: str, domain_name: str, hosted_zone: str) -> dict[str, Any]:
+    return {
+        'template': os.path.join('network','certificate.yaml'),
+        'stack_name': domain_stack_name(stage,tenant),
+        'parameters': {
+            'Stage': stage,
+            'Tenant': tenant,
+            'DomainName': domain_name,
+            'HostedZone': hosted_zone,
         }
     }
 
@@ -45,7 +60,7 @@ def api_gateway(stage: str, tenant: str, domain_name: str, hosted_zone: str, cer
             'Tenant': tenant,
             'DomainName': domain_name,
             'HostedZone': hosted_zone,
-            'Certificate': certificate,
+            'Certificate': certificate if certificate else 'false',
         },
     }
 

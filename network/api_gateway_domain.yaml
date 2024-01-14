@@ -12,6 +12,11 @@ Parameters:
         Type: AWS::Route53::HostedZone::Id
     Certificate:
         Type: String
+        Default: false
+
+
+Conditions:
+    isSecure: !Not [!Equals [!Ref Certificate, false]]
 
 
 Resources:
@@ -19,10 +24,12 @@ Resources:
         Type: AWS::ApiGatewayV2::DomainName
         Properties:
             DomainName: !Sub api.${DomainName}
-            DomainNameConfigurations:
-              - SecurityPolicy: TLS_1_2
-                CertificateArn: !Ref Certificate
-                EndpointType: REGIONAL
+            DomainNameConfigurations: !If
+              - isSecure
+              - - SecurityPolicy: TLS_1_2
+                  CertificateArn: !Ref Certificate
+                  EndpointType: REGIONAL
+              - !Ref AWS::NoValue
             Tags:
                 Service: ApiGatewayV2
                 Resource: DomainName
