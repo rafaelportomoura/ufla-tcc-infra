@@ -145,7 +145,7 @@ def cognito(stage: str, tenant: str, email_identity: str) -> dict[str, Any]:
     }
 
 def event_bus_stack_name(stage: str, tenant: str) -> str:
-    return stack_name(stage,tenant,'Cognito')
+    return stack_name(stage,tenant,'Event-Bus')
 def event_bus(stage: str, tenant: str) -> dict[str, Any]:
     return {
         'template': os.path.join('sns','event_bus.yaml'),
