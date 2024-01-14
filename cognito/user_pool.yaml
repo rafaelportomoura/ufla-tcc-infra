@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Cognito configuration'
+
+Parameters:
+    Stage:
+        Type: String
+    Tenant:
+        Type: String
+    EmailIdentity:
+        Type: String
+
+Resources:
+    CognitoUserPool:
+        Type: AWS::Cognito::UserPool
+        Properties:
+            UserPoolName: !Sub ${Stage}-${Tenant}-user-pool
+            UserPoolTags:
+                Service: Cognito
+                Resource: UserPool
+                Name: !Sub ${Stage}-${Tenant}-user-pool
+                Stage: !Ref Stage
+                Tenant: !Ref Tenant
+                StackName: !Ref AWS::StackName
+                StackId: !Ref AWS::StackId
+                Region: !Ref AWS::Region
+            MfaConfiguration: "OFF"
+            EmailConfiguration:
+                EmailSendingAccount: DEVELOPER
+                SourceArn: !Sub arn:aws:ses:${AWS::Region}:${AWS::AccountId}:identity/${EmailIdentity}
+            AliasAttributes:
+              - email
+            Schema:
+              - Name: email
+                AttributeDataType: String
+                Required: true
+                Mutable: true
+            AutoVerifiedAttributes:
+              - email
+            Policies:
+                PasswordPolicy:
+                    MinimumLength: 8
+                    RequireLowercase: true
+                    RequireNumbers: true
+                    RequireSymbols: true
+                    RequireUppercase: true
+                    TemporaryPasswordValidityDays: 7
+
+    UserPoolClient:
+        Type: AWS::Cognito::UserPoolClient
+        Properties:
+            ClientName: !Sub ${Stage}-${Tenant}-cognito-client
+            ExplicitAuthFlows:
+              - ALLOW_ADMIN_USER_PASSWORD_AUTH
+              - ALLOW_USER_PASSWORD_AUTH
+              - ALLOW_REFRESH_TOKEN_AUTH
+            GenerateSecret: false
+            PreventUserExistenceErrors: ENABLED
+            SupportedIdentityProviders:
+              - COGNITO
+            UserPoolId: !Ref CognitoUserPool
+
+Outputs:
+    CognitoUserPoolArn:
+        Description: Cognito UserPool Arn
+        Value: !GetAtt CognitoUserPool.Arn
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-user-poll-arn
+    CognitoUserPoolId:
+        Description: Cognito UserPool Id
+        Value: !Ref CognitoUserPool
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-user-pool-id
+    ClientId:
+        Description: Cognito UserPoolClient Id
+        Value: !Ref UserPoolClient
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-user-pool-client

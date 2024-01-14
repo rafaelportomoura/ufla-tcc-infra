@@ -2,41 +2,57 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Template for Domain and Certificate
 
 Parameters:
-  DomainName:
-    Type: String
+    Stage:
+        Type: String
+    Tenant:
+        Type: String
+    DomainName:
+        Type: String
 
 Resources:
-  DNSDomainResource: 
-    Type: "AWS::Route53::HostedZone"
-    Properties: 
-      HostedZoneConfig: 
-        Comment: 'My hosted zone for example.com'
-      Name: !Ref DomainName
+    HostedZone:
+        Type: "AWS::Route53::HostedZone"
+        Properties:
+            Name: !Ref DomainName
 
-  DNSDomainCertificate: 
-    Type: "AWS::CertificateManager::Certificate"
-    Properties: 
-      DomainName: !Sub '*.${DomainName}'
-      DomainValidationOptions:
-        - DomainName: !Sub '*.${DomainName}'
-          HostedZoneId: !GetAtt DNSDomainResource.Id
-      ValidationMethod: DNS
+    DNSCertificate:
+        Type: "AWS::CertificateManager::Certificate"
+        Properties:
+            DomainName: !Sub '*.${DomainName}'
+            DomainValidationOptions:
+              - DomainName: !Sub '*.${DomainName}'
+                HostedZoneId: !GetAtt HostedZone.Id
+            ValidationMethod: DNS
+            Tags:
+              - Key: Service
+                Value: CertificateManager
+              - Key: Resource
+                Value: Certificate
+              - Key: StackName
+                Value: !Ref AWS::StackName
+              - Key: StackId
+                Value: !Ref AWS::StackId
+              - Key: Region
+                Value: !Ref AWS::Region
+              - Key: Name
+                Value: !Sub ${Stage}-${Tenant}-domain-certificate
+
 
 Outputs:
-  DNSDomainName:
-    Description: "DNS Domain Name"
-    Value: !Ref DomainName
-    Export:
-      Name: domain-name
+    HostedZoneName:
+        Description: "HostedZone Domain Name"
+        Value: !Ref DomainName
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-domain-name
 
-  DNSDomainId:
-    Description: "DNS Domain Name"
-    Value: !GetAtt DNSDomainResource.Id
-    Export:
-      Name: domain-id
-      
-  DNSDomainCertificateArn:
-    Description: "DNS Domain Certificate Arn"
-    Value: !Ref DNSDomainCertificate
-    Export:
-      Name: domain-certificate
+    HostedZoneId:
+        Description: "HostedZone Id"
+        Value: !GetAtt HostedZone.Id
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-hosted-zone-id
+
+    DNSCertificateArn:
+        Description: "DNS Domain Certificate Arn"
+        Value: !Ref DNSCertificate
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-domain-certificate

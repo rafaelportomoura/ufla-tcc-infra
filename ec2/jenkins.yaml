@@ -3,101 +3,123 @@ Description: Template for Jenkins Virtual Machine
 
 
 Parameters:
-  Tenant:
-    Type: String
-  VolumeSize:
-    Type: Number
-    MinValue: 1
-  VpcId:
-    Type: AWS::EC2::VPC::Id
-  SubnetId:
-    Type: AWS::EC2::Subnet::Id
-  AmiId:
-    Type: AWS::EC2::Image::Id
-  InstanceType:
-    Type: String
-    Default: t2.micro
-  SgInitIp:
-    Type: String
-    Description: The public ip of person who will access the jenkins
+    Tenant:
+        Type: String
+    VolumeSize:
+        Type: Number
+        MinValue: 1
+    VpcId:
+        Type: AWS::EC2::VPC::Id
+    SubnetId:
+        Type: AWS::EC2::Subnet::Id
+    AmiId:
+        Type: AWS::EC2::Image::Id
+    InstanceType:
+        Type: String
+        Default: t2.micro
+    SgInitIp:
+        Type: String
+        Description: The public ip of person who will access the jenkins
 
 
 
 Resources:
-  JenkinsRole:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      RoleName: JenkinsRole
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service: ec2.amazonaws.com
-          Action: sts:AssumeRole
-      Path: /
-      Policies:
-        - PolicyName: PermissionToAssumeRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-            - Sid: PermissionToAssume
-              Effect: Allow
-              Action: sts:AssumeRole
-              Resource: arn:aws:iam::*:*
-        - PolicyName: PermissionToSendCommand
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-            - Effect: Allow
-              Action: ssm:SendCommand
-              Resource: 
-              - arn:aws:ec2:us-east-2:968945134907:instance/*
-              - arn:aws:ssm:*:*:document/*
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/IAMFullAccess
-        - arn:aws:iam::aws:policy/AWSCodeCommitReadOnly
-        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
-        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+    JenkinsRole:
+        Type: 'AWS::IAM::Role'
+        Properties:
+            RoleName: JenkinsRole
+            AssumeRolePolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                  - Effect: Allow
+                    Principal:
+                        Service: ec2.amazonaws.com
+                    Action: sts:AssumeRole
+            Path: /
+            Policies:
+              - PolicyName: PermissionToAssumeRole
+                PolicyDocument:
+                    Version: '2012-10-17'
+                    Statement:
+                      - Sid: PermissionToAssume
+                        Effect: Allow
+                        Action: sts:AssumeRole
+                        Resource: arn:aws:iam::*:*
+              - PolicyName: PermissionToSendCommand
+                PolicyDocument:
+                    Version: '2012-10-17'
+                    Statement:
+                      - Effect: Allow
+                        Action: ssm:SendCommand
+                        Resource:
+                          - arn:aws:ec2:us-east-2:968945134907:instance/*
+                          - arn:aws:ssm:*:*:document/*
+            ManagedPolicyArns:
+              - arn:aws:iam::aws:policy/IAMFullAccess
+              - arn:aws:iam::aws:policy/AWSCodeCommitReadOnly
+              - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+              - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
 
-  JenkinsSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: !Sub ${Tenant}-jenkins-sg
-      GroupDescription: Enable HTTP access via port 80
-      VpcId: !Ref VpcId
-      SecurityGroupIngress:
-      - CidrIp: !Sub ${SgInitIp}/32
-        FromPort: 80
-        IpProtocol: tcp
-        ToPort: 80
+    JenkinsSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupName: !Sub ${Tenant}-jenkins-sg
+            GroupDescription: Enable HTTP access via port 80
+            VpcId: !Ref VpcId
+            SecurityGroupIngress:
+              - CidrIp: !Sub ${SgInitIp}/32
+                FromPort: 80
+                IpProtocol: tcp
+                ToPort: 80
 
-  JenkinsInstanceProfile: 
-    Type: "AWS::IAM::InstanceProfile"
-    Properties: 
-      InstanceProfileName: !Sub ${Tenant}-instance-profile
-      Path: "/"
-      Roles: 
-        - !Ref JenkinsRole
-  
-  JenkinsInstance: 
-    Type: AWS::EC2::Instance
-    Properties: 
-      ImageId: !Ref AmiId
-      InstanceType: !Ref InstanceType
-      BlockDeviceMappings: 
-      - DeviceName: "/dev/sdm"
-        Ebs: 
-          VolumeType: "io1"
-          Iops: 200
-          DeleteOnTermination: true
-          VolumeSize: !Ref VolumeSize
-      - DeviceName: "/dev/sdk"
-        NoDevice: {}
-      NetworkInterfaces: 
-      - AssociatePublicIpAddress: true
-        DeviceIndex: "0"
-        GroupSet: 
-          - !Ref JenkinsSecurityGroup
-        SubnetId: !Ref SubnetId
-      IamInstanceProfile: !Ref JenkinsInstanceProfile
+    JenkinsInstanceProfile:
+        Type: "AWS::IAM::InstanceProfile"
+        Properties:
+            InstanceProfileName: !Sub ${Tenant}-instance-profile
+            Path: "/"
+            Roles:
+              - !Ref JenkinsRole
+
+    JenkinsInstance:
+        Type: AWS::EC2::Instance
+        Properties:
+            ImageId: !Ref AmiId
+            InstanceType: !Ref InstanceType
+            BlockDeviceMappings:
+              - DeviceName: "/dev/sdm"
+                Ebs:
+                    VolumeType: "io1"
+                    Iops: 200
+                    DeleteOnTermination: true
+                    VolumeSize: !Ref VolumeSize
+              - DeviceName: "/dev/sdk"
+                NoDevice: {}
+            NetworkInterfaces:
+              - AssociatePublicIpAddress: true
+                DeviceIndex: "0"
+                GroupSet:
+                  - !Ref JenkinsSecurityGroup
+                SubnetId: !Ref SubnetId
+            IamInstanceProfile: !Ref JenkinsInstanceProfile
+            UserData: !Base64
+                'Fn::Sub': |
+                    #!/bin/bash
+                    sudo yum install -y https://s3.${AWS::Region}.amazonaws.com/amazon-ssm-${AWS::Region}/latest/linux_amd64/amazon-ssm-agent.rpm
+                    sudo yum update –y
+                    sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+                    # sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+                    sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+                    sudo yum upgrade
+                    sudo amazon-linux-extras install java-openjdk11 -y
+                    sudo yum install jenkins -y
+                    sudo systemctl enable jenkins
+                    sudo chkconfig jenkins on
+                    sudo amazon-linux-extras install docker -y
+                    sudo service docker start
+                    sudo usermod -a -G docker ec2-user
+                    sudo usermod -a -G docker ssm-user
+                    sudo usermod -a -G docker jenkins
+                    sudo chkconfig docker on
+                    sudo yum install -y git
+                    sudo git config --global credential.helper '!aws codecommit credential-helper $@'
+                    sudo git config --global credential.UseHttpPath true

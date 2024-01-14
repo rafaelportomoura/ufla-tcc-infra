@@ -1,0 +1,72 @@
+{
+  "cSpell.enabled": true,
+  "cSpell.language": "en,pt-BR",
+  "cSpell.words": [],
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never",
+    "source.fixAll.eslint": "never"
+  },
+
+  "files.autoSave": "onFocusChange",
+  "files.exclude": {
+    "**/.git": true
+  },
+  "files.associations": {
+    ".env*": "properties",
+    ".prettierrc": "json"
+  },
+
+  "[json]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": false,
+      "source.fixAll": false
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "editor.tabSize": 2
+  },
+
+  "[yaml]": {
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.insertSpaces": true,
+    "editor.autoIndent": "advanced",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": false,
+      "source.fixAll": false
+    },
+    "editor.defaultFormatter": "kennylong.kubernetes-yaml-formatter",
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.tabSize": 4,
+    "editor.detectIndentation": true,
+    "editor.indentSize": "tabSize"
+  },
+
+  "material-icon-theme.folders.associations": {
+    "business": "Core",
+    "services": "Job",
+    "handlers": "Public",
+    "adapters": "Shared",
+    "exceptions": "Error"
+  },
+
+  "[json][yaml]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "never",
+      "source.fixAll": "never"
+    }
+  },
+
+  "workbench.iconTheme": "material-icon-theme"
+}

@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Simple Email Service template'
+
+Parameters:
+    Stage:
+        Type: String
+    Tenant:
+        Type: String
+    EmailIdentityParam:
+        Type: String
+    EmailFeedback:
+        Type: String
+        AllowedValues:
+          - true
+          - false
+        Default: false
+
+Resources:
+    SESConfigurationSet:
+        Type: AWS::SES::ConfigurationSet
+        Properties:
+            Name: !Sub '${Stage}-${Tenant}-ses'
+
+    EmailIdentity:
+        Type: AWS::SES::EmailIdentity
+        Properties:
+            ConfigurationSetAttributes:
+                ConfigurationSetName: !Ref SESConfigurationSet
+            EmailIdentity: !Ref EmailIdentityParam
+            FeedbackAttributes:
+                EmailForwardingEnabled: !Ref EmailFeedback
+
+Outputs:
+    SES:
+        Description: Simple Email Service
+        Value: !Ref SESConfigurationSet
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-ses
+
+    EmailIdentity:
+        Description: Email Identity
+        Value: !Ref EmailIdentity
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-email-identity
