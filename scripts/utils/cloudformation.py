@@ -1,8 +1,10 @@
 import os
 import json
 import time
-from log import Log
+from typing import Any
+from utils.log import Log
 
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 class CloudFormation:
     def __init__(self, profile: str, region: str, log_level=1) -> None: 
@@ -10,7 +12,15 @@ class CloudFormation:
         self.profile = profile
         self.region = region
 
+    def deploy_stack(self, stack: dict[str, Any]) -> None:
+        template = os.path.join(ROOT,stack['template'])
+        stack_name = stack['stack_name']
+        parameters = stack['parameters']
+        self.log.checkpoint(f'Deploy of {stack_name}')
+        self.deploy(template,stack_name,parameters)
+
     def delete_stack(self, stack_name: str) -> None: 
+        self.log.checkpoint(f'Deleting {stack_name}')   
         cmd = self.__delete_stack(stack_name)
         self.log.cmd(cmd)
         os.system(f"{cmd} &> /dev/null")

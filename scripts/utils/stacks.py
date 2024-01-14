@@ -24,7 +24,6 @@ def vpc(stage: str, tenant: str) -> dict[str, Any]:
 def domain_stack_name(stage: str, tenant: str) -> str:
     return stack_name(stage,tenant,'Domain-Name')
 def domain(stage: str, tenant: str, domain = 'rafamoura.com.br') -> dict[str, Any]:
-    domain = f"{stage}.{domain}" if stage != 'prod' else domain
     return {
         'template': os.path.join('network','domain.yaml'),
         'stack_name': domain_stack_name(stage,tenant),
@@ -40,7 +39,7 @@ def certificate_stack_name(stage: str, tenant: str) -> str:
 def certificate(stage: str, tenant: str, domain_name: str, hosted_zone: str) -> dict[str, Any]:
     return {
         'template': os.path.join('network','certificate.yaml'),
-        'stack_name': domain_stack_name(stage,tenant),
+        'stack_name': certificate_stack_name(stage,tenant),
         'parameters': {
             'Stage': stage,
             'Tenant': tenant,
@@ -52,6 +51,7 @@ def certificate(stage: str, tenant: str, domain_name: str, hosted_zone: str) -> 
 def api_gateway_stack_name(stage: str, tenant: str) -> str:
     return stack_name(stage,tenant,'Api-Gateway')
 def api_gateway(stage: str, tenant: str, domain_name: str, hosted_zone: str, certificate: str) -> dict[str, Any]:
+    domain_name = f"{stage}.{domain_name}" if stage != 'prod' else domain_name
     return {
         'template': os.path.join('network','api_gateway_domain.yaml'),
         'stack_name': api_gateway_stack_name(stage,tenant),
@@ -60,7 +60,7 @@ def api_gateway(stage: str, tenant: str, domain_name: str, hosted_zone: str, cer
             'Tenant': tenant,
             'DomainName': domain_name,
             'HostedZone': hosted_zone,
-            'Certificate': certificate if certificate else 'false',
+            'Certificate': certificate,
         },
     }
 
@@ -149,7 +149,7 @@ def event_bus_stack_name(stage: str, tenant: str) -> str:
 def event_bus(stage: str, tenant: str) -> dict[str, Any]:
     return {
         'template': os.path.join('sns','event_bus.yaml'),
-        'stack_name': cognito_stack_name(stage,tenant),
+        'stack_name': event_bus_stack_name(stage,tenant),
         'parameters': {
             'Stage': stage,
             'Tenant': tenant

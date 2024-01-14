@@ -32,16 +32,16 @@ Resources:
               - Key: Name
                 Value: !Ref DomainName
 
-    WWWAlias:
+    WwwRecordSet:
         Type: AWS::Route53::RecordSet
         Properties:
             HostedZoneId: !GetAtt HostedZone.Id
-            Name: www
-            AliasTarget:
-                DNSName: !Ref DomainName
-                EvaluateTargetHealth: false
-                HostedZoneId: !GetAtt HostedZone.Id
+            Name: !Sub www.${DomainName}
             Type: CNAME
+            ResourceRecords:
+              - !Ref DomainName
+            TTL: "300"
+
 Outputs:
     HostedZoneName:
         Description: "HostedZone Domain Name"
