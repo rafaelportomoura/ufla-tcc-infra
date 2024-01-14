@@ -25,6 +25,7 @@ def remove_from_bucket(bucket: str) -> None:
     log.cmd(cmd)
     os.system(cmd)
 
+delete(stacks.event_bus_stack_name(stage,tenant))
 delete(stacks.cognito_stack_name(stage,tenant))
 delete(stacks.ses_stack_name(stage,tenant))
 delete(stacks.api_gateway_stack_name(stage,tenant))

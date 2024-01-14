@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template for event-bus
+
+Parameters:
+    Stage:
+        Type: String
+    Tenant:
+        Type: String
+
+Resources:
+    EventBus:
+        Type: AWS::SNS::Topic
+        Properties:
+            TopicName: !Sub ${Stage}-${Tenant}-event-bus
+
+Outputs:
+    EventBusARN:
+        Value: !Ref EventBus
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-event-bus

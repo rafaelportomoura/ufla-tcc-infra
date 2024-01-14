@@ -84,7 +84,7 @@ deploy_stack(PACKAGE_BUCKET_STACK)
 # 🚀 SES
 ################################################
 SES_STACK = stacks.ses(stage,tenant,'',True)
-deploy_stack(SES_STACK)
+# deploy_stack(SES_STACK)
 
 exports = cloudformation.list_exports()
 EMAIL_IDENTITY = cloudformation.get_export_value(exports,f"{stage}-{tenant}-email-identity" )
@@ -95,3 +95,9 @@ SES = cloudformation.get_export_value(exports,f"{stage}-{tenant}-ses")
 ################################################
 COGNITO_STACK = stacks.cognito(stage,tenant,EMAIL_IDENTITY)
 deploy_stack(COGNITO_STACK)
+
+################################################
+# 🚀 EVENT_BUS
+################################################
+EVENT_BUS_STACK = stacks.event_bus(stage,tenant)
+deploy_stack(EVENT_BUS_STACK)

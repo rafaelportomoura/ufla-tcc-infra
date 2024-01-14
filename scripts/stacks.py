@@ -30,7 +30,7 @@ def domain(stage: str, tenant: str, domain = 'rafamoura.com.br') -> dict[str, An
         'parameters': {
             'Stage': stage,
             'Tenant': tenant,
-            'Domain': domain
+            'DomainName': domain
         }
     }
 
@@ -126,5 +126,17 @@ def cognito(stage: str, tenant: str, email_identity: str) -> dict[str, Any]:
             'Stage': stage,
             'Tenant': tenant,
             'EmailIdentity': email_identity,
+        }
+    }
+
+def event_bus_stack_name(stage: str, tenant: str) -> str:
+    return stack_name(stage,tenant,'Cognito')
+def event_bus(stage: str, tenant: str) -> dict[str, Any]:
+    return {
+        'template': os.path.join('sns','event_bus.yaml'),
+        'stack_name': cognito_stack_name(stage,tenant),
+        'parameters': {
+            'Stage': stage,
+            'Tenant': tenant
         }
     }
