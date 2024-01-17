@@ -133,14 +133,13 @@ def package_bucket() -> dict[str, Any]:
 
 def cognito_stack_name(stage: str, tenant: str) -> str:
     return stack_name(stage,tenant,'Cognito')
-def cognito(stage: str, tenant: str, email_identity: str) -> dict[str, Any]:
+def cognito(stage: str, tenant: str) -> dict[str, Any]:
     return {
         'template': os.path.join('cognito','user_pool.yaml'),
         'stack_name': cognito_stack_name(stage,tenant),
         'parameters': {
             'Stage': stage,
-            'Tenant': tenant,
-            'EmailIdentity': email_identity,
+            'Tenant': tenant
         }
     }
 

@@ -7,8 +7,6 @@ Parameters:
         Type: String
     Tenant:
         Type: String
-    EmailIdentity:
-        Type: String
 
 Resources:
     CognitoUserPool:
@@ -25,15 +23,15 @@ Resources:
                 StackId: !Ref AWS::StackId
                 Region: !Ref AWS::Region
             MfaConfiguration: "OFF"
-            EmailConfiguration:
-                EmailSendingAccount: DEVELOPER
-                SourceArn: !Sub arn:aws:ses:${AWS::Region}:${AWS::AccountId}:identity/${EmailIdentity}
             AliasAttributes:
               - email
             Schema:
               - Name: email
                 AttributeDataType: String
                 Required: true
+                Mutable: true
+              - Name: group
+                AttributeDataType: String
                 Mutable: true
             AutoVerifiedAttributes:
               - email
