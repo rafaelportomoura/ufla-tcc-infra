@@ -4,7 +4,7 @@
   "cSpell.words": [],
   "editor.formatOnPaste": false,
   "editor.formatOnType": false,
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "never",
     "source.fixAll.eslint": "never"
@@ -21,8 +21,8 @@
 
   "[json]": {
     "editor.codeActionsOnSave": {
-      "source.organizeImports": false,
-      "source.fixAll": false
+      "source.organizeImports": "never",
+      "source.fixAll": "never"
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -38,8 +38,8 @@
     "editor.insertSpaces": true,
     "editor.autoIndent": "advanced",
     "editor.codeActionsOnSave": {
-      "source.organizeImports": false,
-      "source.fixAll": false
+      "source.organizeImports": "never",
+      "source.fixAll": "never"
     },
     "editor.defaultFormatter": "kennylong.kubernetes-yaml-formatter",
     "editor.formatOnSave": true,
