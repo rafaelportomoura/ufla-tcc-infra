@@ -67,6 +67,9 @@ cloudformation.deploy_stack(INTERFACE_ENDPOINTS_STACK)
 # 🚀 VPC LINKS
 ################################################
 VPC_LINKS_STACK = vpc_link.stack(
-    stage=stage, tenant=tenant, private_security_groups=PRIVATE_SECURITY_GROUP
+    stage=stage,
+    tenant=tenant,
+    private_security_groups=PRIVATE_SECURITY_GROUP,
+    private_subnets=PRIVATE_SUBNETS_IDS,
 )
 cloudformation.deploy_stack(VPC_LINKS_STACK)
