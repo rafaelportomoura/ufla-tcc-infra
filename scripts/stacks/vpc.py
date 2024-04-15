@@ -13,7 +13,7 @@ def stack(stage: str, tenant: str) -> Stack:
         parameters={
             "Stage": stage,
             "Tenant": tenant,
-            "VpcCidr": "10.1.0.0/16",
+            "VpcCidr": "172.31.0.0/16",
             "PrivateSubnetACidr": "172.31.0.0/18",
             "PrivateSubnetBCidr": "172.31.64.0/18",
             "PublicSubnetACidr": "172.31.128.0/18",
