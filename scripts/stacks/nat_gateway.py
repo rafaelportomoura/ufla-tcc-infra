@@ -1,5 +1,5 @@
 from stacks.template_path import path
-from utils.stacks import Stack, stack_name
+from scripts.stacks import Stack, stack_name
 
 
 def stack_name(stage: str, tenant: str) -> str:

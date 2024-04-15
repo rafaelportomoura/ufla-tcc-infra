@@ -1,6 +1,6 @@
 from stacks import load_balancer, app_mesh, cloudmap, event_bus
-from utils.cloudformation import CloudFormation
-from utils.args import get_args
+from scripts.cloudformation import CloudFormation
+from scripts.args import get_args
 
 
 args = get_args(

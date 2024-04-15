@@ -1,6 +1,6 @@
 from stacks import interface_endpoints, nat_gateway, vpc, vpc_link
-from utils.cloudformation import CloudFormation
-from utils.args import get_args
+from scripts.cloudformation import CloudFormation
+from scripts.args import get_args
 
 
 args = get_args(
