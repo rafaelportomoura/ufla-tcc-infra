@@ -25,7 +25,7 @@ Resources:
     LoadBalancer:
         Type: AWS::ElasticLoadBalancingV2::LoadBalancer
         Properties:
-            Name: !Sub ${Stage}-${Tenant}-application-load-balancer
+            Name: !Sub ${Stage}-${Tenant}-lb
             LoadBalancerAttributes:
               - Key: idle_timeout.timeout_seconds
                 Value: '60'
