@@ -27,7 +27,6 @@ VPC_ID = cloudformation.get_export_value(exports, f"{stage}-{tenant}-vpc-id")
 PRIVATE_SUBNETS_IDS = cloudformation.get_export_value(
     exports, f"{stage}-{tenant}-private-subnets-list"
 )
-
 ################################################
 #  🚀 LOADBALANCER DEPLOY
 ################################################
@@ -40,16 +39,28 @@ LB_STACK = load_balancer.stack(
 )
 cloudformation.deploy_stack(LB_STACK)
 
+if not cloudformation.stack_is_succesfully_deployed(LB_STACK["stack_name"]):
+    exit(1)
 ################################################
 # 🚀 APP_MESH
 ################################################
 APP_MESH_STACK = app_mesh.stack(stage=stage, tenant=tenant)
 cloudformation.deploy_stack(APP_MESH_STACK)
+if not cloudformation.stack_is_succesfully_deployed(APP_MESH_STACK["stack_name"]):
+    exit(1)
+
+################################################
+# 🚀 CLOUDMAP
+################################################
 CLOUDMAP_STACK = cloudmap.stack(stage=stage, tenant=tenant, vpc_id=VPC_ID)
 cloudformation.deploy_stack(CLOUDMAP_STACK)
+if not cloudformation.stack_is_succesfully_deployed(CLOUDMAP_STACK["stack_name"]):
+    exit(1)
 
 ################################################
 # 🚀 EVENT BUS
 ################################################
 EVENT_BUS = event_bus.stack(stage=stage, tenant=tenant)
 cloudformation.deploy_stack(EVENT_BUS)
+if not cloudformation.stack_is_succesfully_deployed(EVENT_BUS["stack_name"]):
+    exit(1)
