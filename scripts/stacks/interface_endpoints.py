@@ -9,7 +9,7 @@ def my_stack_name(stage: str, tenant: str) -> str:
 def stack(
     stage: str, tenant: str, vpc_id: str, subnets: str, security_groups: str
 ) -> Stack:
-    Stack(
+    return Stack(
         template=path("vpc", "interface_endpoints.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={

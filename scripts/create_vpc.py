@@ -18,7 +18,9 @@ tenant = args["tenant"]
 region = args["region"]
 profile = args["profile"]
 
-cloudformation = CloudFormation(profile, region, log_level=args["log_level"])
+cloudformation = CloudFormation(
+    profile=profile, region=region, log_level=args["log_level"]
+)
 
 ################################################
 #  🚀 VPC DEPLOY

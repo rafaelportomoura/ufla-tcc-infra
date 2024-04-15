@@ -25,8 +25,3 @@ cloudformation = CloudFormation(profile=profile, region=region, log_level=log_le
 ################################################
 DOMAIN_STACK = domain.stack(stage=stage, tenant=tenant, domain_name="rafamoura.com.br")
 cloudformation.deploy_stack(DOMAIN_STACK)
-
-exports = cloudformation.list_exports()
-HOSTED_ZONE_ID = cloudformation.get_export_value(
-    exports, f"{stage}-{tenant}-hosted-zone-id"
-)
