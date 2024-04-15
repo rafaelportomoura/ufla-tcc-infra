@@ -1,6 +1,6 @@
-from scripts.stacks import domain
-from scripts.utils.cloudformation import CloudFormation
-from scripts.utils.args import get_args
+from stacks import domain
+from utils.cloudformation import CloudFormation
+from utils.args import get_args
 
 
 args = get_args(

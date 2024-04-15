@@ -1,6 +1,6 @@
-from scripts.stacks import certificate, api_gateway_domain
-from scripts.utils.cloudformation import CloudFormation
-from scripts.utils.args import get_args
+from stacks import certificate, api_gateway_domain
+from utils.cloudformation import CloudFormation
+from utils.args import get_args
 
 
 args = get_args(
