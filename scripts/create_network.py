@@ -1,4 +1,5 @@
 from stacks import load_balancer, app_mesh, cloudmap, event_bus
+from scripts.exception import DeployException
 from scripts.cloudformation import CloudFormation
 from scripts.args import get_args
 
@@ -40,14 +41,14 @@ LB_STACK = load_balancer.stack(
 cloudformation.deploy_stack(LB_STACK)
 
 if not cloudformation.stack_is_succesfully_deployed(LB_STACK["stack_name"]):
-    raise Exception("Failed to deploy LoadBalancer stack")
+    raise DeployException(LB_STACK)
 ################################################
 # 🚀 APP_MESH
 ################################################
 APP_MESH_STACK = app_mesh.stack(stage=stage, tenant=tenant)
 cloudformation.deploy_stack(APP_MESH_STACK)
 if not cloudformation.stack_is_succesfully_deployed(APP_MESH_STACK["stack_name"]):
-    raise Exception("Failed to deploy AppMesh stack")
+    raise DeployException(APP_MESH_STACK)
 
 ################################################
 # 🚀 CLOUDMAP
@@ -55,7 +56,7 @@ if not cloudformation.stack_is_succesfully_deployed(APP_MESH_STACK["stack_name"]
 CLOUDMAP_STACK = cloudmap.stack(stage=stage, tenant=tenant, vpc_id=VPC_ID)
 cloudformation.deploy_stack(CLOUDMAP_STACK)
 if not cloudformation.stack_is_succesfully_deployed(CLOUDMAP_STACK["stack_name"]):
-    raise Exception("Failed to deploy CloudMap stack")
+    raise DeployException(CLOUDMAP_STACK)
 
 ################################################
 # 🚀 EVENT BUS
@@ -63,4 +64,4 @@ if not cloudformation.stack_is_succesfully_deployed(CLOUDMAP_STACK["stack_name"]
 EVENT_BUS = event_bus.stack(stage=stage, tenant=tenant)
 cloudformation.deploy_stack(EVENT_BUS)
 if not cloudformation.stack_is_succesfully_deployed(EVENT_BUS["stack_name"]):
-    raise Exception("Failed to deploy EventBus stack")
+    raise DeployException(EVENT_BUS)

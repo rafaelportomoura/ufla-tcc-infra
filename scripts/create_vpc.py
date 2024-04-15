@@ -1,6 +1,7 @@
 from stacks import interface_endpoints, nat_gateway, vpc, vpc_link
 from scripts.cloudformation import CloudFormation
 from scripts.args import get_args
+from scripts.exception import DeployException
 
 
 args = get_args(
@@ -27,6 +28,9 @@ cloudformation = CloudFormation(
 ################################################
 VPC_STACK = vpc.stack(stage, tenant)
 cloudformation.deploy_stack(VPC_STACK)
+
+if not cloudformation.stack_is_succesfully_deployed(VPC_STACK["stack_name"]):
+    raise DeployException(VPC_STACK)
 
 exports = cloudformation.list_exports()
 VPC_ID = cloudformation.get_export_value(exports, f"{stage}-{tenant}-vpc-id")
@@ -55,6 +59,9 @@ NAT_GATEWAY_STACK = nat_gateway.stack(
 )
 cloudformation.deploy_stack(NAT_GATEWAY_STACK)
 
+if not cloudformation.stack_is_succesfully_deployed(NAT_GATEWAY_STACK["stack_name"]):
+    raise DeployException(NAT_GATEWAY_STACK)
+
 ################################################
 # 🚀 INTERFACE_ENDPOINTS
 ################################################
@@ -62,6 +69,11 @@ INTERFACE_ENDPOINTS_STACK = interface_endpoints.stack(
     stage, tenant, VPC_ID, PRIVATE_SUBNETS_IDS, PRIVATE_SECURITY_GROUP
 )
 cloudformation.deploy_stack(INTERFACE_ENDPOINTS_STACK)
+
+if not cloudformation.stack_is_succesfully_deployed(
+    INTERFACE_ENDPOINTS_STACK["stack_name"]
+):
+    raise DeployException(INTERFACE_ENDPOINTS_STACK)
 
 ################################################
 # 🚀 VPC LINKS
@@ -73,3 +85,6 @@ VPC_LINKS_STACK = vpc_link.stack(
     private_subnets=PRIVATE_SUBNETS_IDS,
 )
 cloudformation.deploy_stack(VPC_LINKS_STACK)
+
+if not cloudformation.stack_is_succesfully_deployed(VPC_LINKS_STACK["stack_name"]):
+    raise DeployException(VPC_LINKS_STACK)

@@ -17,6 +17,6 @@ def stack(
         parameters={
             "Tenant": stage,
             "Stage": tenant,
-            "VpcId": vpc_id,
+            "Vpc": vpc_id,
         },
     )

@@ -1,6 +1,7 @@
 from stacks import certificate, api_gateway_domain
 from scripts.cloudformation import CloudFormation
 from scripts.args import get_args
+from scripts.exception import DeployException
 
 
 args = get_args(
@@ -37,6 +38,8 @@ CERTIFICATE = cloudformation.get_export_value(
     exports, f"{stage}-{tenant}-domain-certificate"
 )
 
+if not cloudformation.stack_is_succesfully_deployed(CERTIFICATE["stack_name"]):
+    raise DeployException(CERTIFICATE)
 ################################################
 # 🚀 API GATEWAY DOMAIN
 ################################################
@@ -48,3 +51,8 @@ API_GATEWAY_DOMAIN_STACK = api_gateway_domain.stack(
     certificate=CERTIFICATE,
 )
 cloudformation.deploy_stack(API_GATEWAY_DOMAIN_STACK)
+
+if not cloudformation.stack_is_succesfully_deployed(
+    API_GATEWAY_DOMAIN_STACK["stack_name"]
+):
+    raise DeployException(API_GATEWAY_DOMAIN_STACK)

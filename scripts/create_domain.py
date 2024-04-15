@@ -1,5 +1,6 @@
 from stacks import domain
 from scripts.cloudformation import CloudFormation
+from scripts.exception import DeployException
 from scripts.args import get_args
 
 
@@ -25,3 +26,6 @@ cloudformation = CloudFormation(profile=profile, region=region, log_level=log_le
 ################################################
 DOMAIN_STACK = domain.stack(stage=stage, tenant=tenant, domain_name="rafamoura.com.br")
 cloudformation.deploy_stack(DOMAIN_STACK)
+
+if not cloudformation.stack_is_succesfully_deployed(DOMAIN_STACK["stack_name"]):
+    raise DeployException(DOMAIN_STACK)
