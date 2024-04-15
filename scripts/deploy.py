@@ -1,5 +1,5 @@
 import os
-from scripts.utils.args import get_args
+from utils.args import get_args
 
 
 args = get_args(
