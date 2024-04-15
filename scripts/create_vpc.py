@@ -1,14 +1,11 @@
-import os
-from typing import Any
-from scripts.stacks import interface_endpoints, nat_gateway, vpc
+from stacks import interface_endpoints, nat_gateway, vpc, vpc_link
 from utils.cloudformation import CloudFormation
-from stacks.vpc import vpc
 from utils.args import get_args
 
 
 args = get_args(
     {
-        "stage": {"type": "str", "required": False, "default": "dev"},
+        "stage": {"type": "str", "required": False, "default": "prod"},
         "tenant": {"type": "str", "required": False, "default": "tcc"},
         "region": {"type": "str", "required": False, "default": "us-east-2"},
         "profile": {"type": "str", "required": False, "default": "default"},
@@ -63,3 +60,11 @@ INTERFACE_ENDPOINTS_STACK = interface_endpoints.stack(
     stage, tenant, VPC_ID, PRIVATE_SUBNETS_IDS, PRIVATE_SECURITY_GROUP
 )
 cloudformation.deploy_stack(INTERFACE_ENDPOINTS_STACK)
+
+################################################
+# 🚀 VPC LINKS
+################################################
+VPC_LINKS_STACK = vpc_link.stack(
+    stage=stage, tenant=tenant, private_security_groups=PRIVATE_SECURITY_GROUP
+)
+cloudformation.deploy_stack(VPC_LINKS_STACK)

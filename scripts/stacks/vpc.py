@@ -14,9 +14,12 @@ def stack(stage: str, tenant: str) -> Stack:
             "Stage": stage,
             "Tenant": tenant,
             "VpcCidr": "10.1.0.0/16",
-            "PrivateSubnetACidr": "10.1.1.0/24",
-            "PrivateSubnetBCidr": "10.1.2.0/24",
-            "PublicSubnetACidr": "10.1.3.0/24",
-            "PublicSubnetBCidr": "10.1.4.0/24",
+            "PrivateSubnetACidr": "172.31.0.0/18",
+            "PrivateSubnetBCidr": "172.31.64.0/18",
+            "PublicSubnetACidr": "172.31.128.0/18",
+            "PublicSubnetBCidr": "172.31.192.0/18",
         },
     )
+
+
+# https://nuvibit.com/vpc-subnet-calculator/

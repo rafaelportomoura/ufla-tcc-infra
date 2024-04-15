@@ -52,21 +52,10 @@
     "editor.detectIndentation": true,
     "editor.indentSize": "tabSize"
   },
-
-  "material-icon-theme.folders.associations": {
-    "business": "Core",
-    "services": "Job",
-    "handlers": "Public",
-    "adapters": "Shared",
-    "exceptions": "Error"
-  },
-
   "[json][yaml]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": "never",
       "source.fixAll": "never"
     }
-  },
-
-  "workbench.iconTheme": "material-icon-theme"
+  }
 }

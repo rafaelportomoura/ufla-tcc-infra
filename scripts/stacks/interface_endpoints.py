@@ -7,7 +7,7 @@ def stack_name(stage: str, tenant: str) -> str:
 
 
 def stack(
-    stage: str, tenant: str, vpc_id: str, subnets: list[str], security_groups: list[str]
+    stage: str, tenant: str, vpc_id: str, subnets: str, security_groups: str
 ) -> Stack:
     Stack(
         template=path("vpc", "interface_endpoints.yaml"),
