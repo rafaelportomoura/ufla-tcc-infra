@@ -11,8 +11,8 @@ def stack(stage: str, tenant: str, domain_name: str) -> Stack:
         template=path("domain", "domain.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={
-            "Tenant": stage,
-            "Stage": tenant,
+            "Tenant": tenant,
+            "Stage": stage,
             "DomainName": domain_name,
         },
     )
