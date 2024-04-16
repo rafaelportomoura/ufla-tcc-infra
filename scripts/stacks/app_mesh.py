@@ -14,7 +14,7 @@ def stack(
         template=path("app_mesh", "app_mesh.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={
-            "Tenant": stage,
-            "Stage": tenant,
+            "Tenant": tenant,
+            "Stage": stage,
         },
     )

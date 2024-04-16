@@ -14,7 +14,7 @@ def stack(
         template=path("sns", "event_bus.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={
-            "Tenant": stage,
-            "Stage": tenant,
+            "Tenant": tenant,
+            "Stage": stage,
         },
     )

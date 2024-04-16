@@ -17,8 +17,8 @@ def stack(
         template=path("vpc", "nat_gateway.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={
-            "Tenant": stage,
-            "Stage": tenant,
+            "Tenant": tenant,
+            "Stage": stage,
             "NatName": nat_name,
             "PublicSubnet": public_subnet,
             "PrivateRouteTableId": private_route_table_id,

@@ -17,8 +17,8 @@ def stack(
         template=path("lb", "load_balancers.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={
-            "Tenant": stage,
-            "Stage": tenant,
+            "Tenant": tenant,
+            "Stage": stage,
             "VpcId": vpc_id,
             "SubnetIdList": subnets,
             "HasPrivateSubnet": "true" if has_private_subnet else "false",
