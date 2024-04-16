@@ -3,7 +3,7 @@ from scripts.stacks import Stack, stack_name
 
 
 def my_stack_name(stage: str, tenant: str) -> str:
-    return stack_name(stage, tenant, "Vpc-Nat-Gateway")
+    return stack_name(stage=stage, tenant=tenant, name="Vpc-Nat-Gateway")
 
 
 def stack(

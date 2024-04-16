@@ -3,7 +3,7 @@ from scripts.stacks import Stack, stack_name
 
 
 def my_stack_name(stage: str, tenant: str) -> str:
-    return stack_name(stage, tenant, "Domain")
+    return stack_name(stage=stage, tenant=tenant, name="Domain")
 
 
 def stack(stage: str, tenant: str, domain_name: str) -> Stack:

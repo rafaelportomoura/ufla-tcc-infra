@@ -3,7 +3,7 @@ from stacks.template_path import path
 
 
 def my_stack_name(stage: str, tenant: str) -> str:
-    return stack_name(stage, tenant, "Vpc-Interface-Endpoints")
+    return stack_name(stage=stage, tenant=tenant, name="Vpc-Interface-Endpoints")
 
 
 def stack(
