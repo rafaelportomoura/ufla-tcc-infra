@@ -7,7 +7,4 @@ def my_stack_name() -> str:
 
 
 def stack() -> Stack:
-    return Stack(
-        template=path("s3", "package_bucket.yaml"),
-        stack_name=my_stack_name(),
-    )
+    return Stack(template=path("s3", "package_bucket.yaml"), stack_name=my_stack_name())
