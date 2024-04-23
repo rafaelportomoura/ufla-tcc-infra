@@ -10,7 +10,7 @@ def stack(
     stage: str, tenant: str, domain_name: str, hosted_zone: str, certificate: str
 ) -> Stack:
     return Stack(
-        template=path("domain", "certificate.yaml"),
+        template=path("api", "api_gateway_domain.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={
             "Tenant": tenant,
