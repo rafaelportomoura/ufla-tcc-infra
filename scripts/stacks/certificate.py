@@ -6,7 +6,7 @@ def my_stack_name(stage: str, tenant: str) -> str:
     return stack_name(stage=stage, tenant=tenant, name="Certificate")
 
 
-def stack(stage: str, tenant: str, hosted_zone: str) -> Stack:
+def stack(stage: str, tenant: str, hosted_zone: str, domain_name: str) -> Stack:
     return Stack(
         template=path("domain", "certificate.yaml"),
         stack_name=my_stack_name(stage, tenant),
@@ -14,5 +14,6 @@ def stack(stage: str, tenant: str, hosted_zone: str) -> Stack:
             "Tenant": tenant,
             "Stage": stage,
             "HostedZone": hosted_zone,
+            "DomainName": domain_name,
         },
     )

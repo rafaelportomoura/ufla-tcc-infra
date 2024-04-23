@@ -30,7 +30,7 @@ DOMAIN_NAME = cloudformation.get_export_value(exports, f"{stage}-{tenant}-domain
 # 🚀 CERTIFICATE
 ################################################
 CERTIFICATE_STACK = certificate.stack(
-    stage=stage, tenant=tenant, hosted_zone=HOSTED_ZONE_ID
+    stage=stage, tenant=tenant, hosted_zone=HOSTED_ZONE_ID, domain_name=DOMAIN_NAME
 )
 cloudformation.deploy_stack(CERTIFICATE_STACK)
 exports = cloudformation.list_exports()
