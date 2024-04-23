@@ -39,7 +39,7 @@ Outputs:
             Name: !Sub ${Stage}-${Tenant}-app-mesh-arn
     MeshName:
         Description: The ARN of the app mesh
-        Value: !Ref AppMesh
+        Value: !GetAtt AppMesh.MeshName
         Export:
             Name: !Sub ${Stage}-${Tenant}-app-mesh-name
 
