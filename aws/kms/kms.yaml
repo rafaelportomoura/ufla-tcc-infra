@@ -6,23 +6,16 @@ Parameters:
         Type: String
     Tenant:
         Type: String
-    Microservice:
-        Type: String
-        Description: 'Microservice of the key'
-        MinLength: 1
-        MaxLength: 100
-        AllowedPattern: '[a-zA-Z0-9-_]+'
-        ConstraintDescription: 'must be a valid microservice name'
 
 Resources:
     EncryptKey:
         Type: AWS::KMS::Key
         Properties:
-            Description: !Sub ${Stage}-${Tenant}-${Microservice} Key
+            Description: !Sub ${Stage}-${Tenant} Key
             Enabled: true
             KeyPolicy:
                 Version: 2012-10-17
-                Id: !Sub ${Stage}-${Tenant}-${Microservice}-key--policy
+                Id: !Sub ${Stage}-${Tenant}-key--policy
                 Statement:
                   - Sid: Enable IAM User Permissions
                     Effect: Allow
@@ -47,7 +40,7 @@ Resources:
               - Key: Resource
                 Value: Key
               - Key: Name
-                Value: !Sub ${Stage}-${Tenant}-${Microservice}-key
+                Value: !Sub ${Stage}-${Tenant}-key
               - Key: StackName
                 Value: !Ref AWS::StackName
               - Key: StackId
@@ -60,10 +53,10 @@ Outputs:
         Description: EncryptKey ID
         Value: !Ref EncryptKey
         Export:
-            Name: !Sub ${Stage}-${Tenant}-${Microservice}-encrypt-key-id
+            Name: !Sub ${Stage}-${Tenant}-encrypt-key-id
 
     KmsArn:
         Description: EncryptKey Arn
         Value: !GetAtt EncryptKey.Arn
         Export:
-            Name: !Sub ${Stage}-${Tenant}-${Microservice}-encrypt-key-arn
+            Name: !Sub ${Stage}-${Tenant}-encrypt-key-arn
