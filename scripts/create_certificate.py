@@ -38,8 +38,8 @@ CERTIFICATE = cloudformation.get_export_value(
     exports, f"{stage}-{tenant}-domain-certificate"
 )
 
-if not cloudformation.stack_is_succesfully_deployed(CERTIFICATE["stack_name"]):
-    raise DeployException(CERTIFICATE)
+if not cloudformation.stack_is_succesfully_deployed(CERTIFICATE_STACK["stack_name"]):
+    raise DeployException(CERTIFICATE_STACK)
 ################################################
 # 🚀 API GATEWAY DOMAIN
 ################################################
