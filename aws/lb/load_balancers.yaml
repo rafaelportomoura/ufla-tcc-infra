@@ -94,6 +94,16 @@ Resources:
             Protocol: HTTP
 
 
+    PrivateSubnetSecurityGroupIngressFromLBSecurityGroup:
+        Type: AWS::EC2::SecurityGroupIngress
+        Properties:
+            Description: Ingress from public subnet
+            GroupId: {"Fn::ImportValue": !Sub "${Stage}-${Tenant}-private-subnet-security-group-id"}
+            IpProtocol: -1
+            SourceSecurityGroupId: !Ref LBSecurityGroup
+
+
+
 Outputs:
     LoadBalancerArn:
         Description: The ARN of the load balancer
