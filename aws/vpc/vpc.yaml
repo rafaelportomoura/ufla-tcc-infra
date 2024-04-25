@@ -447,6 +447,15 @@ Resources:
             IpProtocol: -1
             GroupId: !Ref PublicSubnetSecurityGroup
 
+    PublicSubnetSecurityGroupFromSelf:
+        Type: AWS::EC2::SecurityGroupIngress
+        Properties:
+            Description: Ingress from other resources in the same security group
+            GroupId: !Ref PublicSubnetSecurityGroup
+            IpProtocol: -1
+            SourceSecurityGroupId: !Ref PublicSubnetSecurityGroup
+
+
     # -------------------------------
     # SECURITY GROUPS DAS PRIVATE SUBNETS
     # -------------------------------
