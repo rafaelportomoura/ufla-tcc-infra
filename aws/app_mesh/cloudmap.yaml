@@ -47,4 +47,8 @@ Outputs:
         Value: !GetAtt CloudMapNamespace.HostedZoneId
         Export:
             Name: !Sub ${Stage}-${Tenant}-cloud-map-namespace-hosted-zone-id
-
+    CloudMapServiceId:
+        Description: CloudMap service Id
+        Value: !Ref CloudMapService
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-cloud-map-service-id
