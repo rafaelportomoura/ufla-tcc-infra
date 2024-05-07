@@ -10,7 +10,7 @@ def stack(
     stage: str, tenant: str, subnet_ids_list: str, security_group_id_list: str
 ) -> Stack:
     return Stack(
-        template=path("vpc", "vpc.yaml"),
+        template=path("database", "documentdb.yaml"),
         stack_name=my_stack_name(stage, tenant),
         parameters={
             "Stage": stage,
