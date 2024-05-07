@@ -24,7 +24,6 @@ cloudformation = CloudFormation(profile=profile, region=region, log_level=log_le
 
 ################################################
 exports = cloudformation.list_exports()
-VPC_ID = cloudformation.get_export_value(exports, f"{stage}-{tenant}-vpc-id")
 PRIVATE_SUBNETS_IDS = cloudformation.get_export_value(
     exports, f"{stage}-{tenant}-private-subnets-list"
 )
