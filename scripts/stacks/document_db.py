@@ -16,6 +16,6 @@ def stack(
             "Stage": stage,
             "Tenant": tenant,
             "SubnetIdsList": subnet_ids_list,
-            "SecurityGroupIdsList": security_group_id_list,
+            "SecurityGroupIdList": security_group_id_list,
         },
     )
