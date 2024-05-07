@@ -13,6 +13,33 @@ Parameters:
         Type: List<AWS::EC2::SecurityGroup::Id>
 
 Resources:
+
+    Parameter:
+        Type: AWS::SSM::Parameter
+        Properties:
+            Name: !Sub ${Stage}-${Tenant}-document-db
+            Tags:
+                Service: SSM
+                Resource: Parameter
+                Name: !Sub ${Stage}-${Tenant}-document-db
+                StackName: !Ref AWS::StackName
+                StackId: !Ref AWS::StackId
+                Region: !Ref AWS::Region
+                Stage: !Ref Stage
+                Tenant: !Ref Tenant
+            Type: String
+            Value:
+                Fn::ToJsonString:
+                    host: !Sub
+                      - ${Endpoint}:${Port}
+                      - Endpoint: Cluster.Endpoint
+                        Port: !GetAtt Cluster.Port
+                    protocol: mongodb
+                    options:
+                        retryWrites: false
+                        readPreference: secondaryPreferred
+                        replicaSet: rs
+
     SecretManager:
         Type: AWS::SecretsManager::Secret
         Properties:
@@ -162,7 +189,7 @@ Outputs:
             Name: !Sub ${Stage}-${Tenant}-document-db-cluster-endpoint
     ClusterPort:
         Description: Cluster Port
-        Value: !GetAtt Cluster.Endpoint
+        Value: !GetAtt Cluster.Port
         Export:
             Name: !Sub ${Stage}-${Tenant}-document-db-cluster-port
     DBInstance:
