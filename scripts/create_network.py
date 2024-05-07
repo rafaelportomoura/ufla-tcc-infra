@@ -51,14 +51,6 @@ if not cloudformation.stack_is_succesfully_deployed(APP_MESH_STACK["stack_name"]
     raise DeployException(APP_MESH_STACK)
 
 ################################################
-# 🚀 CLOUDMAP
-################################################
-CLOUDMAP_STACK = cloudmap.stack(stage=stage, tenant=tenant, vpc_id=VPC_ID)
-cloudformation.deploy_stack(CLOUDMAP_STACK)
-if not cloudformation.stack_is_succesfully_deployed(CLOUDMAP_STACK["stack_name"]):
-    raise DeployException(CLOUDMAP_STACK)
-
-################################################
 # 🚀 EVENT BUS
 ################################################
 EVENT_BUS = event_bus.stack(stage=stage, tenant=tenant)
