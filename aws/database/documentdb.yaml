@@ -128,7 +128,6 @@ Resources:
             DBClusterParameterGroupName: !Ref ParameterGroup
             DBSubnetGroupName: !Ref SubnetGroup
             EngineVersion: '5.0.0'
-            KmsKeyId: String
             MasterUsername: !Sub '{{resolve:secretsmanager:${Stage}-${Tenant}-document-db:SecretString:username}}'
             MasterUserPassword: !Sub '{{resolve:secretsmanager:${Stage}-${Tenant}-document-db:SecretString:password}}'
             BackupRetentionPeriod: 7
