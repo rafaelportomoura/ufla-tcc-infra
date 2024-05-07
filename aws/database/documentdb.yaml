@@ -72,7 +72,7 @@ Resources:
         Properties:
             Name: !Sub ${Stage}-${Tenant}-parameter-group
             Description: !Sub "Parameter group for ${Stage}-${Tenant}"
-            Family: "docdb5.0.0"
+            Family: "docdb5.0"
             Parameters:
                 audit_logs: "disabled"
                 tls: "disable"
