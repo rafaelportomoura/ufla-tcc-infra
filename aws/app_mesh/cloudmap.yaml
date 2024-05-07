@@ -15,17 +15,6 @@ Resources:
             Name: !Sub ${Stage}-${Tenant}.local
             Vpc: !Ref Vpc
 
-    CloudMapService:
-        Type: AWS::ServiceDiscovery::Service
-        Properties:
-            Name: local
-            NamespaceId: !Ref CloudMapNamespace
-            DnsConfig:
-                DnsRecords:
-                  - Type: A
-                    TTL: 60
-                RoutingPolicy: MULTIVALUE
-
 Outputs:
     CloudMapNamespaceId:
         Description: The ID of the cloud map namespace
@@ -47,8 +36,3 @@ Outputs:
         Value: !GetAtt CloudMapNamespace.HostedZoneId
         Export:
             Name: !Sub ${Stage}-${Tenant}-cloud-map-namespace-hosted-zone-id
-    CloudMapServiceId:
-        Description: CloudMap service Id
-        Value: !Ref CloudMapService
-        Export:
-            Name: !Sub ${Stage}-${Tenant}-cloud-map-service-id
