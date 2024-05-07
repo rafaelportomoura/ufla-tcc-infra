@@ -75,7 +75,7 @@ Resources:
             Family: "docdb5.0"
             Parameters:
                 audit_logs: "disabled"
-                tls: "disable"
+                tls: "disabled"
                 ttl_monitor: "disabled"
             Tags:
               - Key: Service
