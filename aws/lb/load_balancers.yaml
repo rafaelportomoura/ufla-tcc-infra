@@ -93,6 +93,21 @@ Resources:
             Port: 80
             Protocol: HTTP
 
+    ListenerRule:
+      Type: "AWS::ElasticLoadBalancingV2::ListenerRule"
+      Properties:
+        ListenerArn: !Ref ListenerHTTP
+        Priority: 1
+        Actions:
+          - Type: fixed-response
+            FixedResponseConfig: 
+                StatusCode: 204
+        Conditions:
+          - Field: http-request-method
+            HttpRequestMethodConfig:  
+                Values: 
+                - OPTIONS
+
 
     PrivateSubnetSecurityGroupIngressFromLBSecurityGroup:
         Type: AWS::EC2::SecurityGroupIngress
