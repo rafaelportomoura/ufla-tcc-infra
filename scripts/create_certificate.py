@@ -29,16 +29,22 @@ DOMAIN_NAME = cloudformation.get_export_value(exports, f"{stage}-{tenant}-domain
 ################################################
 # 🚀 CERTIFICATE
 ################################################
+us_east_1 = (
+    cloudformation
+    if region == "us-east-1"
+    else CloudFormation(profile=profile, region="us-east-1", log_level=log_level)
+)
+
 CERTIFICATE_STACK = certificate.stack(
     stage=stage, tenant=tenant, hosted_zone=HOSTED_ZONE_ID, domain_name=DOMAIN_NAME
 )
-cloudformation.deploy_stack(CERTIFICATE_STACK)
-exports = cloudformation.list_exports()
-CERTIFICATE = cloudformation.get_export_value(
+us_east_1.deploy_stack(CERTIFICATE_STACK)
+exports = us_east_1.list_exports()
+CERTIFICATE = us_east_1.get_export_value(
     exports, f"{stage}-{tenant}-domain-certificate"
 )
 
-if not cloudformation.stack_is_succesfully_deployed(CERTIFICATE_STACK["stack_name"]):
+if not us_east_1.stack_is_succesfully_deployed(CERTIFICATE_STACK["stack_name"]):
     raise DeployException(CERTIFICATE_STACK)
 ################################################
 # 🚀 API GATEWAY DOMAIN
