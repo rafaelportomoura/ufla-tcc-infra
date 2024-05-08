@@ -38,7 +38,7 @@ Resources:
                     options:
                         retryWrites: false
                         readPreference: secondaryPreferred
-                        replicaSet: rs
+                        replicaSet: rs0
 
     SecretManager:
         Type: AWS::SecretsManager::Secret
