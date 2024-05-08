@@ -32,7 +32,7 @@ DOMAIN_NAME = cloudformation.get_export_value(exports, f"{stage}-{tenant}-domain
 CERTIFICATE_STACK = certificate.stack(
     stage=stage, tenant=tenant, hosted_zone=HOSTED_ZONE_ID, domain_name=DOMAIN_NAME
 )
-us_east_1 = CloudFormation(profile=profile, region=region, log_level=log_level)
+us_east_1 = CloudFormation(profile=profile, region="us-east-1", log_level=log_level)
 us_east_1.deploy_stack(CERTIFICATE_STACK)
 exports = us_east_1.list_exports()
 CERTIFICATE = us_east_1.get_export_value(
