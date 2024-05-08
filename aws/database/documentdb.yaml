@@ -47,8 +47,8 @@ Resources:
             GenerateSecretString:
                 SecretStringTemplate: '{"username": "username"}'
                 GenerateStringKey: "password"
-                PasswordLength: 30
-                ExcludeCharacters: '"@/\'
+                PasswordLength: 10
+                ExcludeCharacters: "\"\\`;'()_-.~*{}:,/?:@&=+$#"
             Tags:
               - Key: Service
                 Value: SecretsManager
