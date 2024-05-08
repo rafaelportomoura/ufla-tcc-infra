@@ -32,7 +32,7 @@ Resources:
                 Fn::ToJsonString:
                     host: !Sub
                       - ${Endpoint}:${Port}
-                      - Endpoint: Cluster.Endpoint
+                      - Endpoint: !GetAtt Cluster.Endpoint
                         Port: !GetAtt Cluster.Port
                     protocol: mongodb
                     options:
