@@ -112,7 +112,7 @@ Outputs:
         Value: !Ref S3Bucket
         Description: Images Bucket
         Export:
-            Name: !Sub ${Stage}-${Tenant}-images
+            Name: !Sub ${Stage}-${Tenant}-images-bucket
 
     CloudFrontDistributionId:
         Value: !Ref CloudFrontDistribution
