@@ -48,6 +48,7 @@ Resources:
                 SecretStringTemplate: '{"username": "username"}'
                 GenerateStringKey: "password"
                 PasswordLength: 20
+                ExcludeCharacters: "\"\\`;'()_-.!~*^´<>[]º|{}:,/?:@&=+$#"
             Tags:
               - Key: Service
                 Value: SecretsManager
@@ -95,7 +96,7 @@ Resources:
             BackupRetentionPeriod: 1
             DBClusterIdentifier: !Sub ${Stage}-${Tenant}-cluster
             DBSubnetGroupName: !Ref Subnet
-            DeletionProtection: true
+            DeletionProtection: false
             EnableCloudwatchLogsExports:
               - postgresql
             Engine: aurora-postgresql
