@@ -27,8 +27,9 @@ HOSTED_ZONE_ID = cloudformation.get_export_value(
 )
 DOMAIN_NAME = cloudformation.get_export_value(exports, f"{stage}-{tenant}-domain-name")
 ################################################
-# 🚀 CERTIFICATE
+# 🚀 CERTIFICATE US-EAST-1
 ################################################
+print("🗺 Creating in us-east-1")
 us_east_1 = (
     cloudformation
     if region == "us-east-1"
@@ -41,4 +42,17 @@ CERTIFICATE_STACK = certificate.stack(
 us_east_1.deploy_stack(CERTIFICATE_STACK)
 
 if not us_east_1.stack_is_succesfully_deployed(CERTIFICATE_STACK["stack_name"]):
+    raise DeployException(CERTIFICATE_STACK)
+
+if region == "us-east-1":
+    exit(0)
+
+################################################
+# 🚀 CERTIFICATE REGION
+################################################
+
+print(f"🗺 Creating in {region}")
+cloudformation.deploy_stack(CERTIFICATE_STACK)
+
+if not cloudformation.stack_is_succesfully_deployed(CERTIFICATE_STACK["stack_name"]):
     raise DeployException(CERTIFICATE_STACK)
