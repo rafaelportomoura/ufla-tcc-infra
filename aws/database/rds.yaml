@@ -17,26 +17,6 @@ Parameters:
 Conditions:
 
 Resources:
-    Parameter:
-        Type: AWS::SSM::Parameter
-        Properties:
-            Name: !Sub ${Stage}-${Tenant}-rds
-            Tags:
-                Service: SSM
-                Resource: Parameter
-                Name: !Sub ${Stage}-${Tenant}-rds
-                StackName: !Ref AWS::StackName
-                StackId: !Ref AWS::StackId
-                Region: !Ref AWS::Region
-                Stage: !Ref Stage
-                Tenant: !Ref Tenant
-            Type: String
-            Value:
-                Fn::ToJsonString:
-                    host: !GetAtt Cluster.Endpoint.Address
-                    port: !GetAtt Cluster.Endpoint.Port
-                    protocol: postgresql
-
     SecretManager:
         Type: AWS::SecretsManager::Secret
         Properties:
@@ -164,6 +144,11 @@ Outputs:
         Value: !GetAtt Cluster.Endpoint.Port
         Export:
             Name: !Sub ${Stage}-${Tenant}-rds-cluster-port
+    ClusterProtocol:
+        Description: The protocol of the RDS cluster
+        Value: postgresql
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-rds-cluster-protocol
     WriterInstanceEndpoint:
         Description: The endpoint of the RDS writer instance
         Value: !GetAtt WriterInstance.Endpoint.Address
@@ -184,8 +169,3 @@ Outputs:
         Value: !Sub ${Stage}-${Tenant}-rds
         Export:
             Name: !Sub ${Stage}-${Tenant}-rds-secret-name
-    ParameterName:
-        Description: The name of the RDS parameter
-        Value: !Ref Parameter
-        Export:
-            Name: !Sub ${Stage}-${Tenant}-rds-parameter-name
