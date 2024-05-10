@@ -34,10 +34,8 @@ Resources:
             Type: String
             Value:
                 Fn::ToJsonString:
-                    host: !Sub
-                      - ${Endpoint}:${Port}
-                      - Endpoint: !GetAtt Cluster.Endpoint.Address
-                        Port: !GetAtt Cluster.Endpoint.Port
+                    host: !GetAtt Cluster.Endpoint.Address
+                    port: !GetAtt Cluster.Endpoint.Port
                     protocol: postgresql
 
     SecretManager:
