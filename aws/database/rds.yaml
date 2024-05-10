@@ -17,6 +17,26 @@ Parameters:
 Conditions:
 
 Resources:
+    Parameter:
+        Type: AWS::SSM::Parameter
+        Properties:
+            Name: !Sub ${Stage}-${Tenant}-rds
+            Tags:
+                Service: SSM
+                Resource: Parameter
+                Name: !Sub ${Stage}-${Tenant}-rds
+                StackName: !Ref AWS::StackName
+                StackId: !Ref AWS::StackId
+                Region: !Ref AWS::Region
+                Stage: !Ref Stage
+                Tenant: !Ref Tenant
+            Type: String
+            Value:
+                Fn::ToJsonString:
+                    host: !GetAtt Cluster.Endpoint.Address
+                    port: !GetAtt Cluster.Endpoint.Port
+                    protocol: postgresql
+
     SecretManager:
         Type: AWS::SecretsManager::Secret
         Properties:
@@ -25,9 +45,6 @@ Resources:
                 SecretStringTemplate: 
                   Fn::ToJsonString:
                     username: username
-                    host: !GetAtt Cluster.Endpoint.Address
-                    port: !GetAtt Cluster.Endpoint.Port
-                    protocol: postgresql
                 GenerateStringKey: "password"
                 PasswordLength: 20
                 ExcludeCharacters: "\"\\`;'()_-.!~*^´<>[]º|{}:,/?:@&=+$#"
@@ -48,6 +65,7 @@ Resources:
                 Value: !Ref AWS::Region
               - Key: Name
                 Value: !Sub ${Stage}-${Tenant}-rds
+
     Subnet:
         Type: AWS::RDS::DBSubnetGroup
         Properties:
@@ -74,6 +92,8 @@ Resources:
 
     Cluster:
         Type: AWS::RDS::DBCluster
+        DependsOn:
+             - SecretManager
         Properties:
             BackupRetentionPeriod: 1
             DBClusterIdentifier: !Sub ${Stage}-${Tenant}-cluster
@@ -164,3 +184,8 @@ Outputs:
         Value: !Sub ${Stage}-${Tenant}-rds
         Export:
             Name: !Sub ${Stage}-${Tenant}-rds-secret-name
+    ParameterName:
+        Description: The name of the RDS parameter
+        Value: !Ref Parameter
+        Export:
+            Name: !Sub ${Stage}-${Tenant}-rds-parameter-name
