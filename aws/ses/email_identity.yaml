@@ -34,9 +34,9 @@ Resources:
                     Version: '2012-10-17'
                     Statement:
                         - Effect: Allow
+                          Action: sts:AssumeRole
                           Principal:
-                                Service: ses.amazonaws.com
-                                Action: sts:AssumeRole
+                            Service: ses.amazonaws.com
             Path: /
             Tags:
               - Key: Service
